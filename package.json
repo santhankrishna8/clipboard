@@ -1,0 +1,113 @@
+{
+  "name": "clipvault",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "electron .",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "web": "ng build --configuration development --watch",
+    "check": "node electron/check.ts",
+    "demo": "cross-env CLIPVAULT_DEMO=1 electron .",
+    "eval": "node scripts/eval.ts",
+    "e2e": "node scripts/e2e.mjs",
+    "shots": "node scripts/shoot.mjs",
+    "dist": "ng build && electron-builder --win",
+    "pack": "ng build && electron-builder --win --dir"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "koffi": "^3.3.6",
+    "@huggingface/transformers": "^4.3.2"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.42",
+    "@angular/cdk": "^20.2.14",
+    "@angular/cli": "^20.3.42",
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/compiler-cli": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@fontsource-variable/hanken-grotesk": "^5.3.0",
+    "@types/jasmine": "~5.1.0",
+    "cross-env": "^10.1.0",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0",
+    "jasmine-core": "~5.9.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "lucide": "^1.66.0",
+    "pdfjs-dist": "^6.4.299",
+    "puppeteer-core": "^25.16.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "typescript": "~5.9.2"
+  },
+  "type": "module",
+  "main": "electron/main.ts",
+  "description": "Local-first encrypted clipboard history and ID/document vault for Windows",
+  "author": "Clipvault",
+  "build": {
+    "appId": "app.clipvault",
+    "productName": "Clipvault",
+    "copyright": "Clipvault",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "asar": false,
+    "files": [
+      "electron/**/*.{ts,cjs}",
+      "!electron/check.ts",
+      
+      "src/app/models.ts",
+      "src/app/validate.ts",
+      "dist/clipvault/browser/**",
+      "package.json",
+      "build/icon.png",
+      "!**/node_modules/onnxruntime-node/bin/napi-v*/{linux,darwin}/**",
+      "!**/node_modules/onnxruntime-web/**",
+      "!**/node_modules/sharp/**",
+      "!**/node_modules/@img/**",
+      "!**/*.map"
+    ],
+    "extraResources": [
+      {
+        "from": "models",
+        "to": "models"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Clipvault"
+    }
+  }
+}

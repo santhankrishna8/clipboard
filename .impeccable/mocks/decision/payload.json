@@ -1,0 +1,127 @@
+{
+  "title": "Choose Clipvault's visual world",
+  "question": "The roll assigned The Manila File. Keep it, take an alternate, or re-roll.",
+  "buildPath": { "value": "code" },
+  "options": [
+    {
+      "id": "assigned",
+      "kind": "assigned",
+      "label": "The Manila File",
+      "kicker": "THE ROLL",
+      "lineage": "Indian government file folders: manila stock, pasted label slips, rubber-stamp ink",
+      "thesis": "Your papers kept the way a clerk keeps them: in a file with a label, stamped when something moves.",
+      "palette": ["#d6c08c", "#fbfaf6", "#1d2433", "#27419b", "#b8332a"],
+      "materials": ["manila stock", "pasted label slips", "stamp-pad blue"],
+      "viewport": "A manila rail beside a crisp white working list; on the right the open item with a COPIED stamp on the number you just copied.",
+      "risk": "Manila drifts into warm-cream nostalgia unless the working surfaces stay crisp white.",
+      "raised": [
+        { "from": "challenger-orienteering", "raise": "Stamp blue is reserved for the one thing you just did (copied, pinned), never for decoration." },
+        { "from": "challenger-splitflap", "raise": "Numbers sit in fixed cells, so an Aadhaar or PAN reads one character at a time." },
+        { "from": "challenger-jcard", "raise": "Every item is identified from its edge by a label slip: kind and time left, in condensed caps." }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html"
+    },
+    {
+      "id": "model-pick",
+      "kind": "pick",
+      "label": "The Comb-Box Form",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Indian bank and passport application forms",
+      "thesis": "Every number is set one character per box, like the form you are about to fill.",
+      "palette": ["#f4f7f2", "#eaf0e6", "#1f3fae", "#16241c", "#b9cdb6"],
+      "materials": ["dropout-green form stock", "ballpoint blue"],
+      "viewport": "A pale form-green shell, square comb boxes carrying the open ID number.",
+      "risk": "The most literal reading of this product, so most runs in this category would land here.",
+      "html": ".impeccable/mocks/decision/pick.html"
+    },
+    {
+      "id": "challenger-wall",
+      "kind": "challenger",
+      "catalogId": "pop-culture-shelf-streaming-title-card-wall",
+      "verdict": "competitive",
+      "label": "Streaming Wall",
+      "lineage": "streaming catalog title-card walls",
+      "thesis": "Screenshots and documents as tiles: the focused one grows, the rest dim.",
+      "palette": ["#14151a", "#2c303a", "#d4b45a"],
+      "materials": ["deep neutral", "tile artwork"],
+      "viewport": "Rows of screenshots and documents; focus grows one tile and dims the rest.",
+      "case": "Holds product clarity for images and files, but history is mostly text, so it wins only that corner.",
+      "risk": "A dark tile wall makes plain text history feel like a media library.",
+      "html": ".impeccable/mocks/decision/challenger-streaming.html"
+    },
+    {
+      "id": "challenger-jcard",
+      "kind": "challenger",
+      "catalogId": "vernacular-ephemera-cassette-j-card",
+      "verdict": "declined",
+      "label": "Cassette J-Card",
+      "lineage": "hand-lettered mixtape inlays",
+      "palette": ["#f6f4ee", "#2a4fa8", "#c4302b"],
+      "materials": ["ballpoint on lined stock"],
+      "case": "Fuses poorly: handwritten ballpoint on a working list is a costume, not a tool.",
+      "kept": "Every item is identified from its edge by a label."
+    },
+    {
+      "id": "challenger-saville",
+      "kind": "challenger",
+      "catalogId": "brand-identity-canon-saville-catalog-sleeve",
+      "verdict": "declined",
+      "label": "Catalog Sleeve",
+      "lineage": "Factory Records catalog identity",
+      "palette": ["#0b0b0c", "#f2f2f2", "#d93a2b"],
+      "materials": ["matte black", "white hairlines"],
+      "case": "Fuses poorly: unlabeled colour codes defeat plain words for non-technical friends.",
+      "kept": "Only the active item is decoded to full colour."
+    },
+    {
+      "id": "challenger-bitmap",
+      "kind": "challenger",
+      "catalogId": "emigre-bitmap-specimen",
+      "verdict": "declined",
+      "label": "Bitmap Specimen",
+      "lineage": "Emigre type specimens",
+      "palette": ["#fafafa", "#111111", "#e0412a"],
+      "materials": ["newsprint", "halftone"],
+      "case": "Fuses poorly: poster-scale pixels fight a dense list and reduce readability.",
+      "kept": "Nothing is blurred or softened."
+    },
+    {
+      "id": "challenger-orienteering",
+      "kind": "challenger",
+      "catalogId": "notation-diagram-systems-orienteering-map",
+      "verdict": "declined",
+      "label": "Orienteering Map",
+      "lineage": "ISOM orienteering maps",
+      "palette": ["#ffffff", "#7a4a1e", "#9b2f8f"],
+      "materials": ["contour texture"],
+      "case": "Fuses poorly: a map's terrain ground carries nothing a clipboard has.",
+      "kept": "One reserved colour marks only the active layer.",
+      "raisedInto": "assigned"
+    },
+    {
+      "id": "challenger-splitflap",
+      "kind": "challenger",
+      "catalogId": "signals-instruments-split-flap-concourse",
+      "verdict": "declined",
+      "label": "Split-Flap Board",
+      "lineage": "rail concourse departure boards",
+      "palette": ["#14161a", "#f2f0e8", "#e8a21a"],
+      "materials": ["matte black flaps", "brushed steel"],
+      "case": "Fuses poorly: a flip-board costume turns a working list into an instrument.",
+      "kept": "Characters live in fixed cells."
+    }
+  ],
+  "canon": true,
+  "canonCard": {
+    "kind": "canon",
+    "label": "The category standard",
+    "thesis": "A neutral three-pane clipboard manager with one blue accent, done impeccably.",
+    "palette": ["#ffffff", "#f3f4f6", "#111827", "#2563eb"],
+    "materials": ["system grey", "white panes"],
+    "viewport": "Sidebar, list and preview in Windows-neutral greys.",
+    "risk": "Indistinguishable from other clipboard managers by design.",
+    "html": ".impeccable/mocks/decision/canon.html"
+  },
+  "reroll": { "registers": ["safer", "bolder"] },
+  "steer": true
+}

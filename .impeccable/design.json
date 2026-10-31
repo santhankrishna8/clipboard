@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T00:00:00Z",
+  "title": "Design System: Clipvault",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Dropout Paper", "canonical": "#f6f8f3", "tonalRamp": ["#16241c", "#2c4033", "#54665a", "#6f8f75", "#8aab8f", "#c9d7c5", "#e9efe4", "#f6f8f3"] },
+      "field": { "role": "neutral", "displayName": "Field White", "canonical": "#fdfefb", "tonalRamp": ["#16241c", "#54665a", "#8aab8f", "#c9d7c5", "#e1eadc", "#e9efe4", "#f6f8f3", "#fdfefb"] },
+      "rail": { "role": "neutral", "displayName": "Rail Green", "canonical": "#e9efe4", "tonalRamp": ["#16241c", "#2c4033", "#54665a", "#8aab8f", "#c9d7c5", "#e1eadc", "#e9efe4", "#f6f8f3"] },
+      "rule": { "role": "neutral", "displayName": "Rule Green", "canonical": "#c9d7c5", "tonalRamp": ["#2c4033", "#54665a", "#6f8f75", "#8aab8f", "#a9c0a8", "#c9d7c5", "#e1eadc", "#f6f8f3"] },
+      "edge": { "role": "neutral", "displayName": "Edge Green", "canonical": "#6f8f75", "tonalRamp": ["#16241c", "#2c4033", "#44614d", "#6f8f75", "#8aab8f", "#a9c0a8", "#c9d7c5", "#e1eadc"] },
+      "box": { "role": "neutral", "displayName": "Box Green", "canonical": "#8aab8f", "tonalRamp": ["#2c4033", "#44614d", "#6f8f75", "#8aab8f", "#a9c0a8", "#c9d7c5", "#e1eadc", "#f6f8f3"] },
+      "ink": { "role": "neutral", "displayName": "Form Ink", "canonical": "#16241c", "tonalRamp": ["#16241c", "#2c4033", "#44614d", "#54665a", "#6f8f75", "#8aab8f", "#c9d7c5", "#e9efe4"] },
+      "mute": { "role": "neutral", "displayName": "Pencil Grey-Green", "canonical": "#54665a", "tonalRamp": ["#16241c", "#2c4033", "#44564a", "#54665a", "#6f8f75", "#8aab8f", "#c9d7c5", "#e9efe4"] },
+      "ballpoint-blue": { "role": "primary", "displayName": "Ballpoint Blue", "canonical": "#1f3fae", "tonalRamp": ["#0b1020", "#142a75", "#1f3fae", "#4560cc", "#6f86e0", "#9db2ff", "#dfe6fa", "#f2f5fd"] },
+      "blue-wash": { "role": "primary", "displayName": "Blue Wash", "canonical": "#dfe6fa", "tonalRamp": ["#1e2a55", "#1f3fae", "#4560cc", "#6f86e0", "#9db2ff", "#c4d0f7", "#dfe6fa", "#f2f5fd"] },
+      "ink-red": { "role": "secondary", "displayName": "Ink Red", "canonical": "#a8321f", "tonalRamp": ["#3a1d17", "#6b2216", "#a8321f", "#c85a45", "#f2917b", "#f6b8a9", "#f6e4df", "#fbf3f1"] },
+      "safe-green": { "role": "tertiary", "displayName": "Safe Green", "canonical": "#276a43", "tonalRamp": ["#10301e", "#1b4a2e", "#276a43", "#4a8c64", "#7fcf9f", "#a9dfbf", "#d3efdf", "#eef8f2"] }
+    },
+    "typographyMeta": {
+      "title": { "displayName": "Title", "purpose": "Item or page name in the detail pane." },
+      "headline": { "displayName": "Headline", "purpose": "Section and empty-state headings." },
+      "body": { "displayName": "Body", "purpose": "Rows, buttons, navigation." },
+      "label": { "displayName": "Label", "purpose": "Sentence-case captions, day groups, meta lines, hints." },
+      "cell": { "displayName": "Cell", "purpose": "One character per comb box, tabular figures." }
+    },
+    "shadows": [
+      { "name": "toast", "value": "0 1px 2px rgb(22 36 28 / 0.12), 0 8px 24px rgb(22 36 28 / 0.16)", "purpose": "Undo toast only; dark scheme uses 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 30px rgb(0 0 0 / 0.5)." },
+      { "name": "pdf-sheet", "value": "0 1px 3px rgb(0 0 0 / 0.18)", "purpose": "Rendered PDF page sheets in the viewer." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "All state transitions at 100-120ms." },
+      { "name": "write", "value": "1300ms var(--ease) both, 26ms stagger per cell", "purpose": "Copy moment: cells lift 3px, turn ballpoint blue, wash, settle." },
+      { "name": "caret", "value": "1.1s steps(2, jump-none) infinite", "purpose": "Next cell in the password comb blinks while focused." },
+      { "name": "rise", "value": "220ms var(--ease)", "purpose": "Toast entrance." }
+    ],
+    "breakpoints": [
+      { "name": "narrow", "value": "max-width: 1000px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "The one blue action per view.",
+      "html": "<button class=\"ds-btn-primary\">Copy</button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; min-height:34px; padding:0 14px; border:1px solid #1f3fae; border-radius:3px; background:#1f3fae; color:#fff; font:600 14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; transition: filter 120ms cubic-bezier(0.22,1,0.36,1), transform 120ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary:hover { filter:brightness(1.12); } .ds-btn-primary:active { transform:translateY(1px); } .ds-btn-primary:focus-visible { outline:2px solid #1f3fae; outline-offset:2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "custom",
+      "refersTo": "button",
+      "description": "Default secondary action: outlined, transparent.",
+      "html": "<button class=\"ds-btn\">Show</button>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; min-height:34px; padding:0 14px; border:1px solid #6f8f75; border-radius:3px; background:transparent; color:#16241c; font:600 14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; transition: background-color 120ms cubic-bezier(0.22,1,0.36,1); } .ds-btn:hover { background:#e1eadc; } .ds-btn:active { transform:translateY(1px); } .ds-btn:focus-visible { outline:2px solid #1f3fae; outline-offset:2px; }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "custom",
+      "refersTo": "button-danger",
+      "description": "Destructive action in ink red.",
+      "html": "<button class=\"ds-btn-danger\">Delete</button>",
+      "css": ".ds-btn-danger { display:inline-flex; align-items:center; justify-content:center; min-height:34px; padding:0 14px; border:1px solid #a8321f; border-radius:3px; background:transparent; color:#a8321f; font:600 14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; } .ds-btn-danger:hover { background:#f6e4df; } .ds-btn-danger:focus-visible { outline:2px solid #1f3fae; outline-offset:2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Boxed field on field-white with edge outline.",
+      "html": "<input class=\"ds-input\" placeholder=\"Search what you copied\">",
+      "css": ".ds-input { width:260px; min-height:40px; padding:6px 10px; border:1px solid #6f8f75; border-radius:3px; background:#fdfefb; color:#16241c; font:14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; transition: border-color 120ms cubic-bezier(0.22,1,0.36,1); } .ds-input::placeholder { color:#54665a; opacity:.85; } .ds-input:hover { border-color:#16241c; } .ds-input:focus-visible { outline:2px solid #1f3fae; outline-offset:0; }"
+    },
+    {
+      "name": "Navigation Item",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Rail link; active state is a field fill with inset edge outline.",
+      "html": "<nav style=\"display:grid;gap:2px;width:200px\"><a class=\"ds-nav\" href=\"#\">History</a><a class=\"ds-nav on\" href=\"#\">IDs</a></nav>",
+      "css": ".ds-nav { display:flex; align-items:center; min-height:36px; padding:0 10px; border-radius:3px; color:#54665a; text-decoration:none; font:550 14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; transition: background-color 120ms cubic-bezier(0.22,1,0.36,1), color 120ms cubic-bezier(0.22,1,0.36,1); } .ds-nav:hover { background:#e1eadc; color:#16241c; } .ds-nav.on { background:#fdfefb; color:#16241c; box-shadow: inset 0 0 0 1px #6f8f75; } .ds-nav:focus-visible { outline:2px solid #1f3fae; outline-offset:2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-pressed",
+      "description": "Filter tab; pressed is solid ink.",
+      "html": "<div style=\"display:flex;gap:6px\"><button class=\"ds-chip\" aria-pressed=\"true\">All</button><button class=\"ds-chip\" aria-pressed=\"false\">Text</button></div>",
+      "css": ".ds-chip { min-height:28px; padding:0 9px; border:1px solid transparent; border-radius:3px; background:transparent; color:#54665a; font:600 13px 'Hanken Grotesk Variable','Segoe UI',sans-serif; } .ds-chip:hover { background:#e1eadc; color:#16241c; } .ds-chip[aria-pressed='true'] { background:#16241c; color:#f6f8f3; } .ds-chip:focus-visible { outline:2px solid #1f3fae; outline-offset:2px; }"
+    },
+    {
+      "name": "List Row",
+      "kind": "card",
+      "refersTo": "row",
+      "description": "56px history row with boxed kind icon, title, meta and a slip label.",
+      "html": "<div class=\"ds-row\" aria-selected=\"true\"><span class=\"ds-ico\">T</span><span class=\"ds-txt\"><b>Meeting link for Tuesday</b><i>Copied 10:42 am</i></span><span class=\"ds-slip\">Pinned</span></div>",
+      "css": ".ds-row { width:380px; height:56px; display:flex; align-items:center; gap:12px; padding:0 10px; border-radius:3px; font:14px 'Hanken Grotesk Variable','Segoe UI',sans-serif; color:#16241c; } .ds-row:hover { background:#e1eadc; } .ds-row[aria-selected='true'] { background:#e1eadc; box-shadow: inset 0 0 0 1px #6f8f75; } .ds-ico { width:32px; height:32px; display:grid; place-items:center; border:1px solid #8aab8f; border-radius:3px; background:#fdfefb; color:#54665a; } .ds-txt { flex:1; min-width:0; display:block; } .ds-txt b { display:block; font-weight:600; } .ds-txt i { display:block; font-style:normal; font-size:12.5px; color:#54665a; } .ds-slip { display:inline-flex; align-items:center; min-height:20px; padding:0 6px; border:1px solid #6f8f75; border-radius:2px; font-size:11.5px; font-weight:650; background:#fdfefb; }"
+    },
+    {
+      "name": "Comb Boxes",
+      "kind": "custom",
+      "refersTo": "cell",
+      "description": "Signature: one character per square box, grouped like a printed form field. Add .written to play the blue-ink copy moment.",
+      "html": "<div class=\"ds-digits\"><span class=\"ds-grp\"><span class=\"ds-cell\">2</span><span class=\"ds-cell\">3</span><span class=\"ds-cell\">4</span><span class=\"ds-cell\">1</span></span><span class=\"ds-grp\"><span class=\"ds-cell\">5</span><span class=\"ds-cell\">6</span><span class=\"ds-cell\">7</span><span class=\"ds-cell\">8</span></span><span class=\"ds-grp\"><span class=\"ds-cell\">9</span><span class=\"ds-cell\">0</span><span class=\"ds-cell\">1</span><span class=\"ds-cell\">2</span></span></div>",
+      "css": ".ds-digits { display:flex; flex-wrap:wrap; gap:8px 14px; } .ds-grp { display:inline-flex; gap:3px; } .ds-cell { width:28px; height:38px; display:grid; place-items:center; border:1px solid #8aab8f; border-radius:3px; background:#fdfefb; color:#16241c; font:600 18px 'Hanken Grotesk Variable','Segoe UI',sans-serif; font-variant-numeric:tabular-nums; }"
+    },
+    {
+      "name": "Password Comb",
+      "kind": "input",
+      "refersTo": "cell",
+      "description": "Lock-screen password field: a growing row of cells; typed ones are blue on blue-wash, the next is dashed.",
+      "html": "<div class=\"ds-pw\"><span class=\"ds-pc on\">•</span><span class=\"ds-pc on\">•</span><span class=\"ds-pc on\">•</span><span class=\"ds-pc next\"></span></div>",
+      "css": ".ds-pw { display:flex; gap:3px; align-items:center; min-height:50px; padding:8px 10px; border:1px solid #6f8f75; border-radius:3px; background:#fdfefb; width:240px; } .ds-pc { width:24px; height:32px; display:grid; place-items:center; border:1px solid #8aab8f; border-radius:3px; background:#fdfefb; font:600 15px 'Hanken Grotesk Variable','Segoe UI',sans-serif; } .ds-pc.on { border-color:#1f3fae; color:#1f3fae; background:#dfe6fa; } .ds-pc.next { border:1px dashed #1f3fae; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Comb-Box Form",
+    "overview": "Clipvault is a filled-in Indian bank or passport application: pale dropout-green stock, hairline green rules, square boxed fields, and exactly one pen, a ballpoint blue. The numbers people come for (Aadhaar, PAN, bank accounts) are set one character per square box, and the same boxes carry every number in the product. It is calm and dense, a form somebody has already completed, not a grey three-pane clipboard tool.\n\nBlue is the only action ink. Red appears only for expiry, hidden-until-asked warnings and destructive actions. Everything else is green-tinted neutral. Corners are 2-3px, captions are sentence case, and depth comes from rules and outlines rather than shadow. The dark scheme (follows prefers-color-scheme) is the same form at night: green-black stock with a light periwinkle ink.",
+    "keyCharacteristics": [
+      "Dropout-green neutrals, never grey; one blue ink for action and focus.",
+      "One character per box wherever a short number is shown; tabular figures.",
+      "Square 3px corners, 1px outlines, hairline rules, sentence-case captions at 12.5px.",
+      "Flat at rest; shadow only on the toast (and the PDF page sheet).",
+      "Light and dark are both first-class and token-swapped, not inverted."
+    ],
+    "rules": [
+      { "name": "The One Pen Rule", "body": "Blue is the only action color. It marks what you can do or what was just written, never decoration.", "section": "colors" },
+      { "name": "The Red Is a Warning Rule", "body": "Red appears only for expiry, hidden-until-asked and destructive states, and always with words or an icon beside it.", "section": "colors" },
+      { "name": "The Sentence Case Rule", "body": "Captions are sentence case at 12.5px semibold; no uppercase, no tracking.", "section": "typography" },
+      { "name": "The Outline Not Shadow Rule", "body": "Selected and active states are a 1px edge inset outline, not a lift.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do set any short number (IDs, bank numbers, OTP-like values) in comb boxes with tabular figures.",
+      "Do use Ballpoint Blue for the one primary action per view, focus, and the \"written\" copy moment.",
+      "Do use 1px edge outlines, 3px radius and hairline rule dividers for structure.",
+      "Do provide every color a night counterpart through the same token name swap, and keep reduced-motion fallbacks.",
+      "Do pair red and blue status with words or icons."
+    ],
+    "donts": [
+      "Don't use grey neutrals; every neutral is green-tinted.",
+      "Don't add shadows to cards, rows or panels; flat with outlines.",
+      "Don't use blue for decoration or red for anything other than expiry, warnings and destructive actions.",
+      "Don't use uppercase, tracked captions or other labels above headings.",
+      "Don't introduce pill radii or larger-than-3px corners."
+    ]
+  }
+}

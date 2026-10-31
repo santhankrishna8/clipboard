@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+.angular/
+.taste-skill/
+.impeccable/review/
+.impeccable/clip-frames/
+.impeccable/mocks/decision/serve.txt
+.impeccable/mocks/decision/answer.txt
+site/assets/copy-moment.mp4.tmp
+*.log
+.env

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clipvault: your clipboard, kept private</title>
+<meta name="description" content="Clipvault keeps everything you copy on your Windows laptop, finds it by what it says or what it means, and puts your Aadhaar, PAN and documents two keystrokes away. Nothing leaves the laptop.">
+<meta name="theme-color" content="#f6f8f3">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#how">Skip to content</a>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Clipvault, home">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="1.5" y="6" width="6" height="12" rx="1.5" stroke="currentColor" stroke-width="1.75"/><rect x="9" y="6" width="6" height="12" rx="1.5" fill="currentColor"/><rect x="16.5" y="6" width="6" height="12" rx="1.5" stroke="currentColor" stroke-width="1.75"/></svg>
+    Clipvault
+  </a>
+  <nav aria-label="Page">
+    <a href="#how">How it works</a>
+    <a href="#private">Privacy</a>
+    <a href="#numbers">The numbers</a>
+    <a class="btn small" href="#get">Get Clipvault</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h1">
+    <h1 id="h1"><span class="line"><span>Your clipboard,</span></span> <span class="line"><span>kept private.</span></span></h1>
+    <p class="lede rise">Clipvault keeps everything you copy and puts your Aadhaar, PAN and documents two keystrokes away. It all stays on this laptop.</p>
+    <p class="hero-actions rise"><a class="btn" href="#get">Get Clipvault</a> <a class="link" href="#how">See how it works</a></p>
+
+    <div class="stage rise">
+      <div class="ui hero-ui" data-ui>
+        <div class="ui-head">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="11" r="2.4"/><path d="M5.5 17c.6-1.7 1.9-2.6 3.5-2.6s2.9.9 3.5 2.6M15 9.5h3.5M15 13h3.5"/></svg>
+          <strong>Aadhaar</strong>
+          <span class="ui-meta">Demo data, not a real number</span>
+        </div>
+        <dl class="ui-fields">
+          <div class="ui-row">
+            <dt>Name on card</dt>
+            <div class="acts"><button class="uibtn" type="button" data-copy-plain>Copy</button></div>
+            <dd><span class="plain">Asha Rao</span></dd>
+          </div>
+          <div class="ui-row">
+            <dt id="aad-label">Aadhaar number</dt>
+            <div class="acts">
+              <button class="uibtn" type="button" id="show" aria-pressed="false" aria-describedby="aad-label">Show</button>
+              <button class="uibtn" type="button" id="copy" aria-describedby="aad-label">Copy</button>
+            </div>
+            <dd><div class="digits" id="digits" role="group" aria-label="Aadhaar number, hidden, ends in 0124"></div></dd>
+          </div>
+        </dl>
+        <p class="ui-note" id="hero-note" aria-live="polite">Hidden until you ask. Press Copy to see what happens.</p>
+      </div>
+      <div class="try">
+        <label for="try">Try it with a number</label>
+        <input id="try" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="Type 12 digits…" maxlength="20">
+        <p id="try-note" aria-live="polite">Nothing you type here leaves this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="how" aria-labelledby="how-h">
+    <h2 id="how-h" class="rise">How it works</h2>
+    <ol class="steps">
+      <li class="rise">
+        <p class="say">First, copy anything.</p>
+        <p class="call sel">Flight 6E 2145 · Hyderabad → Bengaluru · 14 Nov, 06:40 · PNR K4X9QZ</p>
+        <div class="resp" data-ui>
+          <div class="u-row on"><span class="u-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></span><span class="u-txt"><b>Flight 6E 2145 · Hyderabad → Bengaluru · 14 Nov, 0…</b><i>Text · WhatsApp · just now</i></span></div>
+        </div>
+      </li>
+      <li class="rise">
+        <p class="say">Then find it by what it says, or what it means.</p>
+        <div class="call ask">
+          <label for="q" class="sr">Search your history</label>
+          <input id="q" type="text" value="when does my plane leave for Bangalore" autocomplete="off" spellcheck="false" readonly>
+          <div class="chips" role="group" aria-label="Try another search">
+            <button type="button" class="chip" aria-pressed="true" data-q="0">when does my plane leave for Bangalore</button>
+            <button type="button" class="chip" aria-pressed="false" data-q="1">K4X9QZ</button>
+            <button type="button" class="chip" aria-pressed="false" data-q="2">how much do I pay the landlord every month</button>
+          </div>
+        </div>
+        <div class="resp" data-ui id="results" aria-live="polite"></div>
+        <p class="caption">Results from the app's own search on a made-up history. The first and third share no words with what they find.</p>
+      </li>
+      <li class="rise wide">
+        <p class="say">Last, press Ctrl + Shift + V anywhere.</p>
+        <div class="call ask">
+          <label for="pq" class="sr">Type to filter your IDs</label>
+          <input id="pq" type="text" value="pan" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="popup" data-ui>
+          <div class="p-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="pq-echo">pan</span></div>
+          <div class="p-group">Identity</div>
+          <ul class="p-list" id="p-list" aria-live="polite"></ul>
+          <div class="p-foot"><span><kbd>Enter</kbd> paste</span><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> copy only</span><span><kbd>Esc</kbd> close</span></div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="private" class="switches" aria-labelledby="priv-h">
+    <h2 id="priv-h" class="sr">What it does for your privacy</h2>
+    <div class="band" data-on="1" style="--c: var(--band-a)">
+      <div><p class="s">Hides numbers until you ask.</p><p class="why">Aadhaar, PAN, card numbers and one-time codes show as dots, and are removed from history after an hour.</p></div>
+      <button class="sw" type="button" role="switch" aria-checked="true" aria-label="Hides numbers until you ask"><span></span></button>
+    </div>
+    <div class="band" data-on="1" style="--c: var(--band-b)">
+      <div><p class="s">Clears the clipboard after a secret.</p><p class="why">30 seconds by default, and it asks Windows' own history and cloud clipboard not to record it.</p></div>
+      <button class="sw" type="button" role="switch" aria-checked="true" aria-label="Clears the clipboard after a secret"><span></span></button>
+    </div>
+    <div class="band" data-on="0" style="--c: var(--band-c)">
+      <div><p class="s">Works with no internet at all.</p><p class="why">The app blocks every network request, and the search model ships inside the installer.</p></div>
+      <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Works with no internet at all"><span></span></button>
+    </div>
+    <div class="band" data-on="0" style="--c: var(--band-d)">
+      <div><p class="s">Locks itself after five minutes.</p><p class="why">It also locks when you lock Windows. The password cannot be reset, so a backup file matters.</p></div>
+      <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Locks itself after five minutes"><span></span></button>
+    </div>
+    <div class="band" data-on="0" style="--c: var(--band-a)">
+      <div><p class="s">Skips your password manager.</p><p class="why">Anything copied from 1Password, Bitwarden or KeePass is never saved, and you can add more programs.</p></div>
+      <button class="sw" type="button" role="switch" aria-checked="false" aria-label="Skips your password manager"><span></span></button>
+    </div>
+  </section>
+
+  <section class="app" aria-labelledby="app-h">
+    <h2 id="app-h" class="rise">The app, as it is</h2>
+    <p class="lead rise">Real screenshots, with made-up data. Light and dark are both designed.</p>
+    <div class="shots">
+      <figure class="rise s1"><img src="assets/shots/history-light.webp" width="1400" height="903" alt="Clipvault's history: a list of copied items on the left, the selected flight booking on the right"><figcaption>History, with the selected item and its actions.</figcaption></figure>
+      <figure class="rise s2"><img src="assets/shots/quick-dark.webp" width="854" height="604" alt="The Ctrl+Shift+V popup in dark mode, showing a PAN card result for the search 'pan'" loading="lazy"><figcaption>The hotkey popup.</figcaption></figure>
+      <figure class="rise s3"><video id="clip" src="assets/copy-moment.mp4" poster="assets/copy-moment-poster.webp" width="1180" height="760" muted loop playsinline preload="metadata" aria-label="A screen recording: an Aadhaar number is revealed in the IDs screen, then copied, and its boxes are written back in blue ink"></video><figcaption>Copying a number: it is written back in ink, box by box.</figcaption></figure>
+      <figure class="rise s4"><img src="assets/shots/docs-light.webp" width="1400" height="903" alt="The Documents screen with a PDF open beside the list" loading="lazy"><figcaption>Documents, searchable inside the PDF.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="built" aria-label="Built with">
+    <p class="rise">Built with</p>
+    <ul class="rise"><li>Electron</li><li>Angular</li><li>TypeScript</li><li>transformers.js</li><li>pdf.js</li><li>Windows DPAPI</li></ul>
+  </section>
+
+  <section class="split" aria-labelledby="split-h">
+    <div class="in">
+      <label for="note" class="sr">A note with private numbers in it. Edit it.</label>
+      <textarea id="note" spellcheck="false" rows="9">Hi Priya, here is what the bank asked for.
+PAN: ABCDE1234F
+Aadhaar: 2345 6789 0124
+OTP 482910
+Card 4111 1111 1111 1111
+Call me on 9845012345 after six.</textarea>
+      <h2 id="split-h" class="head-l" aria-hidden="true">What it</h2>
+    </div>
+    <div class="out">
+      <div class="ui detect" data-ui>
+        <p class="d-title" id="d-title" aria-live="polite"></p>
+        <ul id="d-list"></ul>
+        <p class="d-rest">Everything else is kept as written and searchable.</p>
+      </div>
+      <p class="head-r" aria-hidden="true">hides</p>
+      <h2 class="sr">What it hides</h2>
+    </div>
+  </section>
+
+  <section id="numbers" class="stats" aria-labelledby="stats-h">
+    <h2 id="stats-h" class="sr">How often search puts the right item first</h2>
+    <div class="fig"><p class="big">100%</p><p class="claim">of exact fragments came back first</p></div>
+    <div class="bars" role="list" aria-label="How often the right item came back first, in percent">
+      <div class="bar" role="listitem" tabindex="0" style="--v:0" aria-label="Paraphrased questions, words only: 0 percent"><b>0%</b><i></i><span>Words only</span></div>
+      <div class="bar" role="listitem" tabindex="0" style="--v:79" aria-label="Paraphrased questions, meaning only: 79 percent"><b>79%</b><i></i><span>Meaning only</span></div>
+      <div class="bar hot" role="listitem" tabindex="0" style="--v:79" aria-label="Paraphrased questions, both together: 79 percent first, 92 percent in the top three"><b>79%</b><i></i><span>Both</span></div>
+      <div class="bar" role="listitem" tabindex="0" style="--v:100" aria-label="Exact fragments, words only: 100 percent"><b>100%</b><i></i><span>Words only</span></div>
+      <div class="bar" role="listitem" tabindex="0" style="--v:88" aria-label="Exact fragments, meaning only: 88 percent"><b>88%</b><i></i><span>Meaning only</span></div>
+      <div class="bar hot" role="listitem" tabindex="0" style="--v:100" aria-label="Exact fragments, both together: 100 percent"><b>100%</b><i></i><span>Both</span></div>
+    </div>
+    <p class="note">Left three: questions that share no words with the item. Right three: exact fragments. 24 made-up clipboard items, tuned on the same set, so read it as a check, not a benchmark. Unrelated questions returned nothing.</p>
+  </section>
+
+  <section id="get" class="cta" aria-labelledby="get-h">
+    <div class="copy">
+      <h2 id="get-h">Keep it close.</h2>
+      <p>Windows 10 or 11, 64-bit. The installer carries everything, including the search model, so there is nothing to sign in to and nothing to download after.</p>
+    </div>
+    <div class="ui dialog" data-ui>
+      <p class="dt">Get Clipvault</p>
+      <p class="dd" id="dl-note">Build the installer on your own computer. It takes a few minutes and needs Node.js.</p>
+      <a class="uibtn primary" id="dl" href="#get" hidden>Download for Windows</a>
+      <div class="code"><pre><code id="cmd">npm install
+npm run dist</code></pre><button class="uibtn" type="button" id="cmd-copy">Copy</button></div>
+      <p class="dd small">The installer appears in the release folder.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="tiles">
+  <div class="t t-state"><p>A personal project about keeping private things private. Every ID, document and clipboard item on this page is made up.</p></div>
+  <nav class="t t-nav" aria-label="Footer"><a href="#how">How it works</a><a href="#private">Privacy</a><a href="#numbers">The numbers</a><a href="#get">Get Clipvault</a></nav>
+  <div class="t t-time"><p>Your time right now</p><p class="clock" id="clock">…</p><p class="sm">Read from your own browser. Nothing on this page was sent anywhere.</p></div>
+  <div class="t t-data"><p>Where your data lives</p><p class="path">%APPDATA%\Clipvault</p></div>
+  <div class="t t-word" aria-hidden="true">Clipvault</div>
+  <a class="t t-go" href="#get"><span>Get Clipvault</span><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>
