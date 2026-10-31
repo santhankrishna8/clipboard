@@ -85,3 +85,17 @@ DESIGN.md            the design system (The Comb-Box Form)
 `site/` is plain HTML, CSS and JavaScript: open `site/index.html`, or host the folder anywhere. Its demos run in the browser and send nothing. The download button links to the installer attached to the latest GitHub release (`RELEASE_URL` at the top of `site/site.js`). Attach the installer under the fixed name `Clipvault-Setup.exe` (`release/Clipvault-Setup.exe` after `npm run dist`; copy it from `Clipvault Setup <version>.exe`) and every new release keeps the same link. The installer is too large to host beside the page.
 
 Every ID, document and clipboard item in screenshots, the demo mode and the website is made up.
+
+## License
+
+MIT, see `LICENSE`. Clipvault bundles the all-MiniLM-L6-v2 embedding model (Apache-2.0, ONNX conversion by Xenova), the Hanken Grotesk typeface (SIL Open Font License 1.1) and Lucide icons (ISC). Other packages carry their own licences in `node_modules`.
+
+## Code signing policy
+
+Status: **applying to SignPath Foundation; releases are not signed yet.** Until then, Windows and your browser will ask you to confirm the installer, because the publisher is unknown. Every release lists its SHA-256 checksum so you can check the file you downloaded, and the installer is built by `.github/workflows/release.yml` from the code in this repository.
+
+Once approved, releases will be signed through SignPath: *Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).*
+
+- Authors, reviewers and approvers: the repository owner, [santhankrishna8](https://github.com/santhankrishna8).
+- Privacy: this program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it. Clipvault makes no network connections at all.
+- Setup steps: `docs/code-signing.md`.

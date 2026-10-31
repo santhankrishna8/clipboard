@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tells SignPath what to sign inside the artifact the workflow uploads (a zip holding the installer).
+  Paste this into the project's "initial" artifact configuration in SignPath, or check it against
+  https://docs.signpath.io/artifact-configuration if their schema has moved.
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <pe-file path="Clipvault-Setup.exe">
+      <authenticode-sign />
+    </pe-file>
+  </zip-file>
+</artifact-configuration>

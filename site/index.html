@@ -190,6 +190,12 @@ Call me on 9845012345 after six.</textarea>
       <p class="dt">Get Clipvault</p>
       <p class="dd" id="dl-note">Build the installer on your own computer. It takes a few minutes and needs Node.js.</p>
       <a class="uibtn primary" id="dl" href="#get" hidden>Download for Windows</a>
+      <details class="warn" id="dl-warn" hidden>
+        <summary>Windows shows a warning. Is it safe?</summary>
+        <p>Clipvault is not code-signed yet, so your browser and Windows say they do not know the publisher. That is the whole reason for the warning.</p>
+        <ol><li>In the browser, choose <b>Keep</b>. In Edge: Keep, then Keep anyway.</li><li>When Windows says "Windows protected your PC", choose <b>More info</b>, then <b>Run anyway</b>.</li></ol>
+        <p>The code is public, so you can read it, check the SHA-256 on the release page, or build the installer yourself with the commands below.</p>
+      </details>
       <div class="code"><pre><code id="cmd">npm install
 npm run dist</code></pre><button class="uibtn" type="button" id="cmd-copy">Copy</button></div>
       <p class="dd small">The installer appears in the release folder.</p>

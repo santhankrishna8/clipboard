@@ -219,6 +219,11 @@ kbd { font: inherit; font-weight: 650; padding: 1px 6px; border: 1px solid var(-
 .dialog .dt { font-size: 24px; font-weight: 650; letter-spacing: -0.02em; }
 .dialog .dd { margin: 6px 0 18px; color: var(--mute); font-size: 17px; }
 .dialog .dd.small { margin: 14px 0 0; font-size: 14px; }
+.dialog details { margin-top: 14px; font-size: 14px; }
+.dialog details[hidden] { display: none; }
+.dialog summary { cursor: pointer; font-weight: 650; min-height: 28px; display: flex; align-items: center; }
+.dialog details p { margin-top: 8px; color: var(--mute); }
+.dialog details ol { margin: 8px 0 0 20px; list-style: decimal; display: grid; gap: 4px; }
 .code { margin-top: 18px; display: flex; gap: 10px; align-items: flex-start; padding: 12px; background: var(--rail); border-radius: var(--r); }
 .code pre { margin: 0; flex: 1; overflow-x: auto; user-select: text; }
 .code code { font: 14px/1.6 ui-monospace, 'Cascadia Mono', Consolas, monospace; }

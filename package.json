@@ -78,7 +78,6 @@
     "files": [
       "electron/**/*.{ts,cjs}",
       "!electron/check.ts",
-      
       "src/app/models.ts",
       "src/app/validate.ts",
       "dist/clipvault/browser/**",
@@ -107,7 +106,9 @@
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "Clipvault"
+      "shortcutName": "Clipvault",
+      "artifactName": "Clipvault-Setup.${ext}"
     }
-  }
+  },
+  "license": "MIT"
 }

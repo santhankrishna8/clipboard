@@ -130,6 +130,7 @@ const RELEASE_URL = 'https://github.com/santhankrishna8/clipboard/releases/lates
   if (RELEASE_URL) {
     dl.href = RELEASE_URL;
     dl.hidden = false;
+    $('#dl-warn').hidden = false;
     $('#dl-note').textContent = 'Download the installer (about 176 MB), or build it yourself from source.';
   }
 
