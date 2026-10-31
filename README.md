@@ -82,6 +82,6 @@ DESIGN.md            the design system (The Comb-Box Form)
 
 ## The website
 
-`site/` is plain HTML, CSS and JavaScript: open `site/index.html`, or host the folder anywhere. Its demos run in the browser and send nothing. To show a download button, set `RELEASE_URL` at the top of `site/site.js` to the page of your published installer (the installer is too large to host beside the page; a GitHub release works). Until then the page offers the build steps only.
+`site/` is plain HTML, CSS and JavaScript: open `site/index.html`, or host the folder anywhere. Its demos run in the browser and send nothing. The download button links to the installer attached to the latest GitHub release (`RELEASE_URL` at the top of `site/site.js`). Attach the installer under the fixed name `Clipvault-Setup.exe` (`release/Clipvault-Setup.exe` after `npm run dist`; copy it from `Clipvault Setup <version>.exe`) and every new release keeps the same link. The installer is too large to host beside the page.
 
 Every ID, document and clipboard item in screenshots, the demo mode and the website is made up.

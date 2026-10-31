@@ -1,6 +1,6 @@
 // Clipvault site: small working pieces of the real product. Nothing here talks to a network.
-// Set this to the page of your published installer (for example a GitHub release). Until then the page offers the build steps only.
-const RELEASE_URL = '';
+// The installer is attached to the latest GitHub release under this fixed name, so this link keeps working across versions.
+const RELEASE_URL = 'https://github.com/santhankrishna8/clipboard/releases/latest/download/Clipvault-Setup.exe';
 
 (() => {
   'use strict';
@@ -130,7 +130,7 @@ const RELEASE_URL = '';
   if (RELEASE_URL) {
     dl.href = RELEASE_URL;
     dl.hidden = false;
-    $('#dl-note').textContent = 'Download the installer, or build it yourself from source.';
+    $('#dl-note').textContent = 'Download the installer (about 176 MB), or build it yourself from source.';
   }
 
   // ---- install command ------------------------------------------------------------------------------------------------------
