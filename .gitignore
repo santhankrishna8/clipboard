@@ -10,3 +10,4 @@ release/
 site/assets/copy-moment.mp4.tmp
 *.log
 .env
+models/Xenova/whisper-base.en/

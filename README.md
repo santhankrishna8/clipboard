@@ -3,6 +3,7 @@
 A clipboard history and a private vault for IDs and documents, for Windows. Everything stays on the laptop it runs on.
 
 - **History.** Keeps everything you copy (text, screenshots, files), not the last 25. Pin, delete with undo, pause capture.
+- **Voice typing.** Hold `Ctrl+Shift+Space` in any program and talk; let go and the words are typed where your cursor is. A quick tap talks hands-free until you tap again, Esc cancels. Filler words are dropped, and "new line" / "new paragraph" break lines. Speech is turned into text on the laptop by Whisper (base.en, bundled in the installer); the audio is never saved or sent.
 - **Quick paste.** `Ctrl+Shift+V` anywhere, type a few letters, `Enter` pastes into the program you were in.
 - **IDs.** Aadhaar, PAN, driving licence, passport, voter ID, bank account. Numbers stay hidden until asked for, are set in one box per character, are checked as you type (the Aadhaar checksum, the PAN pattern, IFSC), copy in one click and clear from the clipboard after 30 seconds.
 - **Documents.** Import PDFs and photos, preview them, search inside PDFs with the matched passage marked, drag them straight into a chat or email.
@@ -13,7 +14,8 @@ A clipboard history and a private vault for IDs and documents, for Windows. Ever
 
 | | |
 |---|---|
-| No network | The app blocks every network request (`electron/main.ts`, `hardenSession`). The search model ships inside the installer; nothing is downloaded at run time. |
+| No network | The app blocks every network request (`electron/main.ts`, `hardenSession`). The search and speech models ship inside the installer; nothing is downloaded at run time. |
+| Microphone | Only the dictation pill window may use it, for sound only, and only while you hold the shortcut. Every other permission request is refused. |
 | Encryption | AES-256-GCM for every item, image and document. |
 | History key | Random 256-bit key sealed by Windows DPAPI (Electron `safeStorage`): the data folder opens only for the same Windows user on the same PC. |
 | Vault key | Random key wrapped by `scrypt(password + device secret)`. The device secret is also DPAPI-sealed, so a copied vault file is useless on another PC even with the right password. |
@@ -33,7 +35,7 @@ npm start            # opens Clipvault
 npm run demo         # same, on throwaway made-up data (vault password: clipvault-demo)
 ```
 
-Build the Windows installer (about 180 MB, because it carries Electron, the search runtime and the 23 MB model):
+Build the Windows installer (about 250 MB, because it carries Electron, the model runtime, the 23 MB search model and the 80 MB speech model). `npm run dist` first downloads the speech model into `models/` once (`npm run models`); the app itself never downloads anything:
 
 ```
 npm run dist         # writes release/Clipvault Setup 1.0.0.exe

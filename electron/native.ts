@@ -20,6 +20,8 @@ const GetWindowThreadProcessId = user32.func('uint32_t GetWindowThreadProcessId(
 const GetForegroundWindow = user32.func('void *GetForegroundWindow()');
 const SetForegroundWindow = user32.func('bool SetForegroundWindow(void *h)');
 const keybd_event = user32.func('void keybd_event(uint8_t vk, uint8_t scan, uint32_t flags, uintptr_t extra)');
+const AddClipboardFormatListener = user32.func('bool AddClipboardFormatListener(intptr_t h)');
+const GetAsyncKeyState = user32.func('int16_t GetAsyncKeyState(int vk)');
 const GlobalAlloc = kernel32.func('void *GlobalAlloc(uint32_t flags, size_t n)');
 const GlobalLock = kernel32.func('void *GlobalLock(void *h)');
 const GlobalUnlock = kernel32.func('bool GlobalUnlock(void *h)');
@@ -35,6 +37,16 @@ const CF_HDROP = 15;
 const EXCLUDE = RegisterClipboardFormatW('ExcludeClipboardContentFromMonitorProcessing');
 const wide = (s: string) => Buffer.from(s + '\0', 'utf16le');
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** WM_CLIPBOARDUPDATE: Windows posts it to a listening window after every clipboard change. */
+export const WM_CLIPBOARDUPDATE = 0x031d;
+/** Ask Windows to tell `handle` (BrowserWindow.getNativeWindowHandle()) about every clipboard change, so none is missed between polls. */
+export function listenClipboard(handle: Buffer): boolean {
+  const hwnd = handle.length >= 8 ? handle.readBigInt64LE(0) : BigInt(handle.readInt32LE(0));
+  return AddClipboardFormatListener(hwnd) as boolean;
+}
+/** True while the key with this virtual-key code is physically held down. */
+export const keyDown = (vk: number) => ((GetAsyncKeyState(vk) as number) & 0x8000) !== 0;
 
 export const clipSeq = () => GetClipboardSequenceNumber() as number;
 export const isExcluded = () => IsClipboardFormatAvailable(EXCLUDE) as boolean;

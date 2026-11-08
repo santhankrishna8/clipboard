@@ -23,10 +23,24 @@ const CLEAR = [[15, '15 seconds'], [30, '30 seconds'], [60, '1 minute'], [0, 'Ne
                 <h2>Quick paste</h2>
                 <div class="srow">
                   <div><div class="lbl" id="hk">Shortcut</div><p class="hint">Press it anywhere to search, then Enter to paste. Windows keeps Win+V for itself.</p></div>
-                  <button class="btn key" type="button" aria-labelledby="hk" (click)="record()" (keydown)="keys($event)" (blur)="recording.set(false)">{{ recording() ? 'Press the new keys…' : pretty(s.hotkey) }}</button>
+                  <button class="btn key" type="button" aria-labelledby="hk" (click)="record('hotkey')" (keydown)="keys($event)" (blur)="recording.set('')">{{ recording() === 'hotkey' ? 'Press the new keys…' : pretty(s.hotkey) }}</button>
                 </div>
                 @if (api.state()?.hotkeyOk === false) { <p class="hint warn">Another program is using this shortcut. Choose a different one.</p> }
-                @if (recordError()) { <p class="hint warn" role="alert">{{ recordError() }}</p> }
+                @if (recordError() && errFor() === 'hotkey') { <p class="hint warn" role="alert">{{ recordError() }}</p> }
+              </section>
+
+              <section>
+                <h2>Dictation</h2>
+                <label class="chkrow"><input id="dic" type="checkbox" [checked]="s.dictation" (change)="set('dictation', chk($event))" /><span><b>Type with your voice</b><p class="hint">Hold the shortcut and talk, then let go: the words are typed where your cursor is. Tap it once to talk hands-free, and tap again to finish. Esc cancels. Speech is turned into text on this laptop; the audio is never saved or sent.{{ speechNote() }}</p></span></label>
+                @if (s.dictation) {
+                  <div class="srow">
+                    <div><div class="lbl" id="dk">Dictation shortcut</div><p class="hint">Say "new line" or "new paragraph" to break lines.</p></div>
+                    <button class="btn key" type="button" aria-labelledby="dk" (click)="record('dictationKey')" (keydown)="keys($event)" (blur)="recording.set('')">{{ recording() === 'dictationKey' ? 'Press the new keys…' : pretty(s.dictationKey) }}</button>
+                  </div>
+                  @if (api.state()?.dictationKeyOk === false) { <p class="hint warn">This shortcut is taken, by Clipvault's quick paste or another program. Choose a different one.</p> }
+                  @if (recordError() && errFor() === 'dictationKey') { <p class="hint warn" role="alert">{{ recordError() }}</p> }
+                  <label class="chkrow"><input id="fill" type="checkbox" [checked]="s.dictationFillers" (change)="set('dictationFillers', chk($event))" /><span><b>Leave out "um" and "uh"</b></span></label>
+                }
               </section>
 
               <section>
@@ -116,8 +130,13 @@ export class SettingsPage {
   lock = LOCK;
   hide = HIDE;
   clears = CLEAR;
-  recording = signal(false);
+  recording = signal<'' | 'hotkey' | 'dictationKey'>('');
   recordError = signal('');
+  errFor = signal<'hotkey' | 'dictationKey'>('hotkey');
+  speechNote = computed(() => {
+    const st = this.api.state()?.speech;
+    return st === 'missing' ? ' This build has no speech model, so dictation cannot run.' : st === 'loading' ? ' Getting ready…' : '';
+  });
   panel = signal<'' | 'pw'>('');
   bk = signal<'' | 'export' | 'import'>('');
   old = signal('');
@@ -140,20 +159,22 @@ export class SettingsPage {
   }
   pretty = (a: string) => a.replace('Control', 'Ctrl').replaceAll('+', ' + ');
 
-  record() {
+  record(which: 'hotkey' | 'dictationKey') {
     this.recordError.set('');
-    this.recording.set(true);
+    this.errFor.set(which);
+    this.recording.set(which);
   }
   keys(e: KeyboardEvent) {
-    if (!this.recording()) return;
+    const which = this.recording();
+    if (!which) return;
     e.preventDefault();
-    if (e.key === 'Escape') return this.recording.set(false);
+    if (e.key === 'Escape') return this.recording.set('');
     if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return;
     const mods = [e.ctrlKey && 'Control', e.altKey && 'Alt', e.shiftKey && 'Shift', e.metaKey && 'Super'].filter(Boolean) as string[];
     if (!mods.length) return void this.recordError.set('Include Ctrl, Alt or Shift so it does not clash with typing.');
-    const key = e.key.length === 1 ? e.key.toUpperCase() : e.key.replace('Arrow', '');
-    this.recording.set(false);
-    this.set('hotkey', [...mods, key].join('+'));
+    const key = e.key === ' ' ? 'Space' : e.key.length === 1 ? e.key.toUpperCase() : e.key.replace('Arrow', '');
+    this.recording.set('');
+    this.set(which, [...mods, key].join('+'));
   }
 
   async changePw(e: Event) {

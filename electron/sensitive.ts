@@ -15,7 +15,9 @@ export function detect(raw: string): SensitiveKind | undefined {
   if (/^\d+$/.test(digits)) {
     if (/^[\d]{4}([\s-]?\d{4}){2}$/.test(t) && aadhaarOk(digits)) return 'aadhaar';
     if (digits.length >= 13 && digits.length <= 19 && luhn(digits)) return 'card';
-    if (/^\d{4,8}$/.test(t)) return 'otp'; // a bare short number is most often a one-time code
+    // A bare short number is most often a one-time code, but not a year (2026), which used to be hidden and
+    // deleted after ten minutes. A number copied twice (a PIN code, a customer ID) stops expiring: see History.add.
+    if (/^\d{4,8}$/.test(t) && !/^(19|20)\d\d$/.test(t)) return 'otp';
   }
   if (PAN.test(t.toUpperCase()) && t.length === 10) return 'pan';
   return undefined;

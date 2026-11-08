@@ -8,8 +8,10 @@ import { DEFAULTS, type AppState, type Card, type Kind, type QuickRow, type Sett
 import { seedDemo } from './demo.ts';
 import { History } from './history.ts';
 import { Keys } from './keys.ts';
-import { foregroundWindow, pasteInto, writeFiles } from './native.ts';
+import { Dictation } from './dictation.ts';
+import { foregroundWindow, listenClipboard, pasteInto, WM_CLIPBOARDUPDATE } from './native.ts';
 import { Embedder } from './search.ts';
+import { Speech } from './speech.ts';
 import { Vault } from './vault.ts';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -40,7 +42,8 @@ const saveSettings = () => (mkdirSync(DIR, { recursive: true }), writeFileSync(s
 
 let keys: Keys, history: History | undefined, vault: Vault, embedder: Embedder | undefined;
 let historyState: AppState['history'] = 'ok';
-let main: BrowserWindow | undefined, quick: BrowserWindow, tray: Tray, quitting = false, hotkeyOk = true, prevWindow: unknown;
+let main: BrowserWindow | undefined, quick: BrowserWindow, tray: Tray, quitting = false, hotkeyOk = true, dictationKeyOk = true, prevWindow: unknown;
+let speech: Speech, dictation: Dictation;
 const icon = nativeImage.createFromPath(join(ROOT, 'build', 'icon.png'));
 
 // ---- tell the windows something changed ----------------------------------------------------------------------
@@ -51,7 +54,7 @@ const changed = () => {
 };
 const state = (): AppState => ({
   settings, privateMode: !!history?.paused, history: historyState, vault: vault.state, smart: embedder?.state ?? 'off',
-  version: app.getVersion(), demo: DEMO, hotkeyOk,
+  version: app.getVersion(), demo: DEMO, hotkeyOk, dictationKeyOk, speech: speech?.state ?? 'off',
 });
 
 // ---- windows --------------------------------------------------------------------------------------------------
@@ -113,7 +116,10 @@ function hardenSession() {
   const s = session.defaultSession;
   const local = (u: string) => u.startsWith('app://') || u.startsWith('devtools://') || u.startsWith('data:') || u.startsWith('blob:') || u.startsWith('file://') || (!!DEV_URL && u.startsWith(DEV_URL)) || (!!DEV_URL && u.startsWith('ws://localhost'));
   s.webRequest.onBeforeRequest((d, cb) => cb({ cancel: !local(d.url) })); // nothing in this app talks to the internet
-  s.setPermissionRequestHandler((_w, _p, cb) => cb(false));
+  // The one permission anything gets: the dictation pill may use the microphone, and only for sound.
+  const mic = (w: Electron.WebContents | null, p: string, types?: string[]) => p === 'media' && !!w && w === dictation?.pill?.webContents && settings.dictation && (types ?? ['audio']).every((t) => t === 'audio');
+  s.setPermissionRequestHandler((w, p, cb, d) => cb(mic(w, p, (d as { mediaTypes?: string[] }).mediaTypes)));
+  s.setPermissionCheckHandler((w, p) => mic(w, p));
   s.webRequest.onHeadersReceived((d, cb) =>
     cb({
       responseHeaders: {
@@ -132,13 +138,21 @@ function hardenSession() {
 // ---- settings side effects ------------------------------------------------------------------------------------
 function applySettings(prev?: Settings) {
   nativeTheme.themeSource = settings.theme;
-  if (!prev || prev.hotkey !== settings.hotkey) {
+  if (!prev || prev.hotkey !== settings.hotkey || prev.dictation !== settings.dictation || prev.dictationKey !== settings.dictationKey) {
     globalShortcut.unregisterAll();
-    try {
-      hotkeyOk = globalShortcut.register(settings.hotkey, toggleQuick);
-    } catch {
-      hotkeyOk = false;
-    }
+    const reg = (accel: string, fn: () => void) => {
+      try {
+        return globalShortcut.register(accel, fn);
+      } catch {
+        return false;
+      }
+    };
+    hotkeyOk = reg(settings.hotkey, toggleQuick);
+    dictationKeyOk = !settings.dictation || (settings.dictationKey !== settings.hotkey && reg(settings.dictationKey, dictation.press));
+  }
+  if (prev?.dictation && !settings.dictation) {
+    dictation.cancel();
+    speech.stop(); // give the memory back
   }
   if (!prev || prev.startup !== settings.startup) app.setLoginItemSettings({ openAtLogin: settings.startup, args: ['--hidden'] });
   if (!prev || prev.semantic !== settings.semantic) {
@@ -282,6 +296,9 @@ const api: Record<string, (...a: any[]) => unknown> = {
   'docs:open': (id: string) => shell.openPath(vault.tempFile(id)),
   'docs:copy': needsHistory(async (x, id: string) => x.copyFiles([vault.tempFile(id)])),
 
+  'dictate:audio': (samples: ArrayBuffer, heard: boolean) => dictation.audio(new Float32Array(samples), heard),
+  'dictate:fail': (msg: string) => dictation.fail(msg),
+
   'quick:query': (q: string) => quickRows(q),
   'quick:pick': (id: string, paste: boolean) => quickPick(id, paste),
   'quick:hide': () => quick.hide(),
@@ -320,6 +337,7 @@ app.on('will-quit', () => {
   vault?.lock();
   history?.stop();
   embedder?.stop();
+  speech?.stop();
 });
 
 // Not a top-level await: an ES-module entry that awaits 'ready' deadlocks Electron's startup.
@@ -342,7 +360,17 @@ async function start() {
   vault = new Vault({ dir: DIR, keys, settings: () => settings, embedder: () => embedder, changed });
   if (DEMO && history) await seedDemo(history, vault, () => embedder);
 
+  speech = new Speech(MODELS, changed);
+  dictation = new Dictation({ url, prefs, settings: () => settings, history: () => history, speech });
   makeQuick();
+  dictation.make();
+  // Windows tells this window about every clipboard change, so quick successive copies are all caught.
+  if (history && !DEMO)
+    try {
+      if (listenClipboard(quick.getNativeWindowHandle())) quick.hookWindowMessage(WM_CLIPBOARDUPDATE, history.notify);
+    } catch {
+      /* the 250 ms poll still catches changes */
+    }
   applySettings();
   tray = new Tray(icon.isEmpty() ? nativeImage.createEmpty() : icon.resize({ width: 16 }));
   tray.setToolTip('Clipvault');
@@ -351,6 +379,7 @@ async function start() {
     Menu.buildFromTemplate([
       { label: 'Open Clipvault', click: () => showMain() },
       { label: 'Quick paste', click: toggleQuick },
+      { label: 'Dictate', click: () => settings.dictation && dictation.press() },
       { label: 'Pause capture', type: 'checkbox', click: (m) => api['private:set'](m.checked) },
       { type: 'separator' },
       { label: 'Quit', click: () => app.quit() },

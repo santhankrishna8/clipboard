@@ -13,8 +13,9 @@
     "eval": "node scripts/eval.ts",
     "e2e": "node scripts/e2e.mjs",
     "shots": "node scripts/shoot.mjs",
-    "dist": "ng build && electron-builder --win",
-    "pack": "ng build && electron-builder --win --dir"
+    "models": "node scripts/models.mjs",
+    "dist": "npm run models && ng build && electron-builder --win",
+    "pack": "npm run models && ng build && electron-builder --win --dir"
   },
   "prettier": {
     "printWidth": 100,

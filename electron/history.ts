@@ -7,9 +7,11 @@ import type { Item, Kind, PubItem, Settings } from '../src/app/models.ts';
 import { b64ToF32, blob, f32ToB64, Log } from './crypto.ts';
 import { clipSeq, isExcluded, owner, readFiles, writeFiles, writeText } from './native.ts';
 import { detect, mask } from './sensitive.ts';
+import { htmlText, rtfText } from './text.ts';
 import { find, type Embedder, type Entry } from './search.ts';
 
-const MAX_TEXT = 200_000;
+const MAX_TEXT = 2_000_000;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const LIST_CAP = 3000; // ponytail: the list is capped here; search reaches everything. Page it if people keep >3k items on screen.
 
 export interface HistoryDeps {
@@ -51,7 +53,8 @@ export class History {
     this.sweep();
     this.scheduleEmbed();
     this.lastSeq = clipSeq(); // whatever is on the clipboard at launch was copied before we started
-    if (poll) this.timers.push(setInterval(() => void this.tick(), 400));
+    // Windows' change notification (main.ts hooks it to notify) is the main signal; the poll is the safety net if it never arrives.
+    if (poll) this.timers.push(setInterval(() => void this.tick(), 250));
     this.timers.push(setInterval(() => this.sweep(), 60_000));
   }
   stop() {
@@ -61,32 +64,71 @@ export class History {
   }
 
   // ---- capture ----------------------------------------------------------------------------------------------
+  /** Called on WM_CLIPBOARDUPDATE: read the new content straight away instead of waiting for the next poll. */
+  notify = () => void this.tick();
+
+  private again = false;
   private async tick() {
+    if (this.busy) {
+      this.again = true; // a change arrived mid-capture: look again as soon as this one is stored
+      return;
+    }
     const seq = clipSeq();
-    if (seq === this.lastSeq || this.busy) return;
+    if (seq === this.lastSeq) return;
     this.lastSeq = seq;
-    if (seq <= this.ignoreSeq || this.paused || isExcluded()) return;
+    if (seq <= this.ignoreSeq || this.paused) return;
     this.busy = true;
     try {
-      const app = owner();
-      if (app && this.d.settings().ignoredApps.some((a) => a.toLowerCase() === app.toLowerCase())) return;
-      await this.capture(app);
-    } catch {
-      /* the clipboard changed while we read it, or was busy: the next change is picked up normally */
+      await this.captureWithRetry(seq);
     } finally {
       this.busy = false;
+      if (this.again) {
+        this.again = false;
+        void this.tick();
+      }
     }
   }
 
-  private async capture(app?: string) {
-    const files = await readFiles();
-    if (files.length) return this.add('files', { files }, app);
-    const text = await clipboard.readText();
-    if (text.trim()) return this.add('text', { text: text.slice(0, MAX_TEXT) }, app);
-    for (const it of await clipboard.read()) {
-      const type = it.types.find((t) => t.startsWith('image/'));
-      if (type) return this.add('image', { png: Buffer.from(await (await it.getType(type) as Blob).arrayBuffer()) }, app);
+  /**
+   * Programs often write the clipboard in steps (empty it, then add each format) or keep it open for a moment,
+   * so the first read can be empty or fail. Retry for about half a second, and give up early if something newer
+   * was copied: that change gets its own capture.
+   */
+  private async captureWithRetry(seq: number) {
+    for (const wait of [0, 40, 120, 300]) {
+      if (wait) await sleep(wait);
+      if (clipSeq() !== seq) return void (this.again = true);
+      try {
+        if (isExcluded()) return;
+        const app = owner();
+        if (app && this.d.settings().ignoredApps.some((a) => a.toLowerCase() === app.toLowerCase())) return;
+        if (await this.capture(app)) return;
+      } catch {
+        /* busy or changing under us: try again */
+      }
     }
+  }
+
+  /** True when something was stored; false when nothing could be read yet. */
+  private async capture(app?: string): Promise<boolean> {
+    const files = await readFiles();
+    if (files.length) return this.add('files', { files }, app), true;
+    const text = await clipboard.readText();
+    if (text.trim()) return this.add('text', { text: text.slice(0, MAX_TEXT) }, app), true;
+    const items = await clipboard.read();
+    const of = async (prefix: string) => {
+      for (const it of items) {
+        const type = it.types.find((t) => t.startsWith(prefix));
+        if (type) return (await it.getType(type)) as Blob;
+      }
+    };
+    const img = await of('image/');
+    if (img) return this.add('image', { png: Buffer.from(await img.arrayBuffer()) }, app), true;
+    // Some programs put only rich text on the clipboard: keep its words.
+    const html = await of('text/html');
+    const rich = html ? htmlText(await html.text()) : rtfText(await (await of('text/rtf'))?.text() ?? '');
+    if (rich.trim()) return this.add('text', { text: rich.slice(0, MAX_TEXT) }, app), true;
+    return false; // nothing readable yet: let the caller retry
   }
 
   /** Public so the demo seeder and checks can add items without a real clipboard. */
@@ -96,7 +138,9 @@ export class History {
     const seen = this.byHash.get(hash);
     if (seen) {
       const it = this.log.rows.get(seen)!;
-      this.put({ ...it, at, hits: it.hits + 1 });
+      // A one-time code is copied once. Copied again, it is something you use (a PIN code, a year): stop expiring it.
+      const keep = it.sensitive === 'otp' ? { sensitive: undefined, expires: undefined } : {};
+      this.put({ ...it, at, hits: it.hits + 1, ...keep });
       return this.d.changed();
     }
     const it: Item = { id: randomUUID(), kind, at, first: at, hits: 1, hash, app, pinned: false };

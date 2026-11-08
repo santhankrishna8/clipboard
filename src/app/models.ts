@@ -102,6 +102,9 @@ export interface Settings {
   startup: boolean;
   semantic: boolean;
   ignoredApps: string[];
+  dictation: boolean; // hold a shortcut, talk, release: the words are typed where you are
+  dictationKey: string;
+  dictationFillers: boolean; // drop "um", "uh" and the like
 }
 
 export interface AppState {
@@ -113,6 +116,15 @@ export interface AppState {
   version: string;
   demo: boolean;
   hotkeyOk: boolean;
+  dictationKeyOk: boolean;
+  speech: 'off' | 'loading' | 'ready' | 'missing';
+}
+
+/** What the dictation pill shows. Sent from main to the overlay window. */
+export type DictatePhase = 'listening' | 'hands-free' | 'writing' | 'done' | 'error' | 'idle';
+export interface DictateStatus {
+  phase: DictatePhase;
+  text?: string;
 }
 
 export interface QuickRow {
@@ -135,6 +147,9 @@ export const DEFAULTS: Settings = {
   background: true,
   startup: false,
   semantic: true,
+  dictation: true,
+  dictationKey: 'Control+Shift+Space',
+  dictationFillers: true,
   ignoredApps: ['1Password', 'Bitwarden', 'KeePass', 'KeePassXC', 'Dashlane', 'LastPass', 'NordPass', 'Enpass'],
 };
 

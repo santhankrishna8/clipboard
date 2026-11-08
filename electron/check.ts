@@ -8,6 +8,7 @@ import { randomBytes } from 'node:crypto';
 import { blob, derive, Log, seal, unseal } from './crypto.ts';
 import { aadhaarOk, detect, luhn, mask, verhoeff } from './sensitive.ts';
 import { find, hybrid, tokens, type Entry } from './search.ts';
+import { htmlText, rtfText, tidy } from './text.ts';
 
 // --- seal / unseal
 const key = randomBytes(32);
@@ -62,6 +63,8 @@ assert.equal(detect('482910'), 'otp');
 assert.equal(detect('sk-abcdefghijklmnopqrstuvwx'), 'secret');
 assert.equal(detect('eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0.SflKxwRJSMeKKF2QT4'), 'secret');
 for (const plain of ['hello world', 'meeting at 5', '12345678901', 'https://example.com/a?b=1', 'ABCDE12345']) assert.equal(detect(plain), undefined, plain);
+assert.equal(detect('2026'), undefined, 'a year is not a one-time code');
+assert.equal(detect('4821'), 'otp');
 assert.equal(mask('2345 6789 0123'), '•••• •••• 0123');
 assert.equal(mask('ABCDE1234F'), '••••••234F');
 
@@ -81,5 +84,17 @@ assert.deepEqual(top('zzz unrelated', [0, 0, 0, 1]).filter((id) => id === 'car')
 assert.equal(find(items, { text: 'bicycl' })[0].id, 'bike', 'typed text matches as a substring');
 assert.equal(find(items, { text: 'bicycl' })[0].via, 'text');
 assert.equal(hybrid(items, { text: 'ORL-4471', vec: Float32Array.from([1, 0, 0, 0]) })[0].via, 'both');
+
+// --- rich-text-only copies keep their words
+assert.equal(htmlText('<html><head><style>p{}</style></head><body><p>Fish &amp; chips</p><div>&#8377;450 &nbsp;only</div><!-- x --></body></html>'), 'Fish & chips\n₹450  only');
+assert.equal(rtfText('{\\rtf1\\ansi{\\fonttbl{\\f0 Calibri;}}{\\colortbl;\\red0\\green0\\blue0;}{\\*\\generator Riched20;}\\f0 Hello \\b world\\b0\\par Caf\\\'e9 \\u8377?50}'), 'Hello world\nCafé ₹50');
+
+// --- dictation clean-up
+assert.equal(tidy(' Um, so I think we should, uh, ship it on Friday.'), 'So I think we should, ship it on Friday.');
+assert.equal(tidy('Hi Priya, new line thanks for the update. New paragraph see you soon.'), 'Hi Priya,\nThanks for the update.\n\nSee you soon.');
+assert.equal(tidy('[BLANK_AUDIO]'), '');
+assert.equal(tidy(' (music) hello there'), 'Hello there');
+assert.equal(tidy('Um, hello', false), 'Um, hello');
+assert.equal(tidy('The summary is good.'), 'The summary is good.', 'words that contain a filler are kept');
 
 console.log('electron/check.ts: all checks passed');

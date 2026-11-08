@@ -260,3 +260,22 @@ kbd { font: inherit; font-weight: 650; padding: 1px 6px; border: 1px solid var(-
   .actions .btn.sm:not(.danger):has(.lbl) { width: 34px; padding: 0; }
   .actions .btn.sm:not(.danger) .lbl { display: none; }
 }
+
+/* ---- dictation pill: a transparent, never-focused window at the bottom of the screen --------------------------- */
+.dictate-root, .dictate-root body { background: transparent; }
+cv-dictate { display: grid; place-items: center; height: 100vh; }
+.pill { display: flex; align-items: center; gap: 12px; height: 48px; max-width: 300px; padding: 0 18px 0 14px; border-radius: 999px; background: #101814; color: #eef4ef; border: 1px solid rgb(255 255 255 / 0.12); box-shadow: 0 8px 24px rgb(0 0 0 / 0.35); font-size: 13.5px; font-weight: 600; animation: pill-in 220ms var(--ease) both; }
+.pill.idle { visibility: hidden; }
+.pill .say { white-space: nowrap; }
+.pill .ellip { overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.pill .rec { width: 10px; height: 10px; border-radius: 50%; background: #ff5a4f; box-shadow: 0 0 0 0 rgb(255 90 79 / 0.6); animation: rec 1.4s ease-out infinite; flex: none; }
+.pill.hands-free .rec { background: #9db2ff; box-shadow: none; animation: none; }
+.pill .wave { display: flex; align-items: center; gap: 2px; height: 24px; }
+.pill .wave i { width: 3px; height: 24px; border-radius: 2px; background: currentColor; transform: scaleY(0.12); transform-origin: center; transition: transform 60ms linear; }
+.pill .ok, .pill .bad { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; font-size: 12px; font-weight: 800; }
+.pill .ok { background: #7fcf9f; color: #0f1712; }
+.pill .bad { background: #f2917b; color: #0f1712; }
+.pill .spin { color: #9db2ff; }
+@keyframes rec { 70% { box-shadow: 0 0 0 7px rgb(255 90 79 / 0); } 100% { box-shadow: 0 0 0 0 rgb(255 90 79 / 0); } }
+@keyframes pill-in { from { opacity: 0; transform: translateY(8px) scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .pill, .pill .rec { animation: none; } .pill .wave i { transition: none; } }
